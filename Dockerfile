@@ -32,7 +32,7 @@ RUN apt-get -y upgrade && \
     pecl install imagick && \
     docker-php-ext-enable imagick && \
     docker-php-ext-configure intl && \
-    docker-php-ext-install -j$(nproc) mcrypt  curl gd intl tidy \
+    docker-php-ext-install -j$(nproc) mcrypt  curl gd intl tidy bcmath sockets \
     bz2 mbstring gettext zip  mysqli pdo pdo_mysql shmop && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     rm -r /var/lib/apt/lists/* && \
