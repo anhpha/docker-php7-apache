@@ -24,7 +24,7 @@ RUN echo "Asia/Ho_Chi_Minh" > /etc/timezone \
 COPY ./docker/php.ini /usr/local/etc/php/
 # Install apache, and supplimentary programs. curl and lynx-cur are for debugging the container.
 RUN apt-get -y upgrade && \
-    apt-get -y install libcurl4-openssl-dev curl libmcrypt-dev mcrypt \
+    apt-get -y install libcurl4-gnutls-dev curl libmcrypt-dev mcrypt \
     libpng-dev lynx-cur python-setuptools python-pip supervisor collectd \
     zlib1g-dev libicu-dev g++ libtidy-dev libbz2-dev \
     libmagickwand-dev \

@@ -14,9 +14,8 @@ LoadPlugin cpu
 LoadPlugin write_http
 
 <Plugin write_http>
-    <Node "collectd_exporter">
-	    URL "{{ COLLECTD_WRITEHTTP_HOST }}"
-	    Format "JSON"
-	    StoreRates false
-    </Node>
+    <URL "{{ COLLECTD_WRITEHTTP_HOST }}">
+        Format "JSON"
+        StoreRates false
+    </URL>
 </Plugin>
