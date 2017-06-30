@@ -37,13 +37,6 @@ RUN apt-get -y upgrade && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     rm -r /var/lib/apt/lists/* && \
 	a2enmod rewrite
-#RUN for i in /etc/php/7.0/mods-available/*.ini;do phpenmod $(basename $i .ini); done && \
-#    a2enmod php7.0 && \
-#	a2enmod rewrite
-    #&& apk del autoconf g++ libtool make \
-    #&& rm -rf /tmp/* /var/cache/apk/*
-
-#RUN for i in /etc/php/7.0/mods-available/*.ini;do phpenmod $(basename $i .ini); done
 
 # Enable mod_expires
 RUN cp /etc/apache2/mods-available/expires.load /etc/apache2/mods-enabled/
@@ -63,20 +56,20 @@ RUN service apache2 restart && \
 	sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /usr/local/etc/php/php.ini
 
 # Manually set up the apache environment variables
-ENV "APACHE_RUN_USER"="www-data" "APACHE_RUN_GROUP"="www-data" \
-	"APACHE_LOG_DIR"="/var/log/apache2" "APACHE_LOCK_DIR"="/var/lock/apache2" \
-	"APACHE_PID_FILE"="/var/run/apache2.pid"
+# ENV "APACHE_RUN_USER"="www-data" "APACHE_RUN_GROUP"="www-data" \
+# 	"APACHE_LOG_DIR"="/var/log/apache2" "APACHE_LOCK_DIR"="/var/lock/apache2" \
+# 	"APACHE_PID_FILE"="/var/run/apache2.pid"
 
 
-ADD docker/supervisord.conf /etc/supervisord.conf
-ADD	docker/collectd-config.conf.tpl /etc/collectd/configs/collectd-config.conf.tpl
-RUN pip install --upgrade pip && pip install envtpl
+# ADD docker/supervisord.conf /etc/supervisord.conf
+# ADD	docker/collectd-config.conf.tpl /etc/collectd/configs/collectd-config.conf.tpl
+# RUN pip install --upgrade pip && pip install envtpl
 
-#RUN mkdir /etc/myservice
-COPY docker/start.sh /usr/local/bin
-COPY docker/foreground.sh /usr/local/bin
+# #RUN mkdir /etc/myservice
+# COPY docker/start.sh /usr/local/bin
+# COPY docker/foreground.sh /usr/local/bin
 
-RUN chmod +x /usr/local/bin/start.sh && \
-	chmod +x /usr/local/bin/foreground.sh
+# RUN chmod +x /usr/local/bin/start.sh && \
+# 	chmod +x /usr/local/bin/foreground.sh
 
-CMD [ "start.sh" ]
+# CMD [ "start.sh" ]
