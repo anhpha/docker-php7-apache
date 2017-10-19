@@ -22,20 +22,37 @@ RUN echo "Asia/Ho_Chi_Minh" > /etc/timezone \
     dpkg-reconfigure -f noninteractive tzdata
 #copy default ini
 COPY ./docker/php.ini /usr/local/etc/php/
+# Install memcached
+RUN apt-get -y update
+RUN buildDeps=" \
+                git \
+                libmemcached-dev \
+                zlib1g-dev \
+                libcurl4-gnutls-dev curl libmcrypt-dev mcrypt \
+                libpng-dev lynx-cur python-setuptools   \
+                zlib1g-dev libicu-dev g++ libtidy-dev libbz2-dev \
+                libmagickwand-dev \
+        " \
+        && doNotUninstall=" \
+                libmemcached11 \
+                libmemcachedutil2 \
+        " \
+        && apt-get install -y $buildDeps --no-install-recommends \
+        && rm -r /var/lib/apt/lists/* \
+        \
+        && docker-php-source extract \
+        && git clone --branch php7 https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached/ \
+        && docker-php-ext-install -j$(nproc) mcrypt opcache curl gd intl tidy bcmath sockets \
+                                bz2 mbstring gettext zip  mysqli pdo pdo_mysql shmop memcached \
+        \
+        && docker-php-source delete \
+        && apt-mark manual $doNotUninstall 
+        # && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $buildDeps
 # Install apache, and supplimentary programs. curl and lynx-cur are for debugging the container.
-RUN apt-get -y upgrade && \
-    apt-get -y install libcurl4-gnutls-dev curl libmcrypt-dev mcrypt \
-    libpng-dev lynx-cur python-setuptools python-pip supervisor collectd \
-    zlib1g-dev libicu-dev g++ libtidy-dev libbz2-dev \
-    libmagickwand-dev \
-        --no-install-recommends && \
-    pecl install imagick && \
+RUN pecl install imagick && \
     docker-php-ext-enable imagick && \
     docker-php-ext-configure intl && \
-    docker-php-ext-install -j$(nproc) mcrypt opcache curl gd intl tidy bcmath sockets \
-    bz2 mbstring gettext zip  mysqli pdo pdo_mysql shmop && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
-    rm -r /var/lib/apt/lists/* && \
 	a2enmod rewrite
 
 # Enable mod_expires
