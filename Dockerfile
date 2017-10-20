@@ -54,7 +54,6 @@ RUN pecl install imagick && \
     docker-php-ext-configure intl && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
 	a2enmod rewrite
-
 # Enable mod_expires
 RUN cp /etc/apache2/mods-available/expires.load /etc/apache2/mods-enabled/
 ADD docker/apache-config.conf /etc/apache2/sites-enabled/000-default.conf
