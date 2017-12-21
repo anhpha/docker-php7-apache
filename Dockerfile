@@ -45,7 +45,7 @@ RUN buildDeps=" acl \
                                 bz2 mbstring gettext zip  mysqli pdo pdo_mysql shmop memcached \
         \
         && docker-php-source delete \
-        && apt-mark manual $doNotUninstall 
+        && apt-mark manual $doNotUninstall
 # Install APCu and APC backward compatibility
 RUN pecl install apcu \
     && pecl install apcu_bc-1.0.3 \

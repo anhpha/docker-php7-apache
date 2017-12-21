@@ -1,0 +1,4 @@
+.git
+symfony/.git
+symfony/*/.git
+symfony/**/.git
